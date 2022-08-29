@@ -6,6 +6,6 @@ export const getMovies = () => {
     return API.get('/movies')
 }
 
-export const removeItem = (id) => {
-    return API.delete(`/movies/${id}`)
+export const removeItem = async (id) => {
+    return await API.delete(`/movies/${id}`)
 }
