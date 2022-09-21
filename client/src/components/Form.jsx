@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Input from "./Input";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import FileBase from "react-file-base64";
+import { useDispatch } from "react-redux";
+import { addMovie } from "../services/movies/movieSlice";
 const Form = () => {
   const [movieData, setMovieData] = useState({
     name: "",
@@ -12,6 +14,9 @@ const Form = () => {
     excerpt: "",
   });
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const handleChange = (e) => {
     setMovieData({
       ...movieData,
@@ -21,16 +26,17 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/movies/", movieData)
-      .then((res) => {
-        res.status === 201 ? console.log("success") : console.log("error");
-      })
-      .catch((err) => console.log(err));
+    // axios
+    //   .post("http://localhost:8000/movies/", movieData)
+    //   .then((res) => {
+    //     res.status === 201 ? console.log("success") : console.log("error");
+    //   })
+    //   .catch((err) => console.log(err));
+      
+    // document.getElementById("form").reset();
+    dispatch(addMovie(movieData))
+    navigate('/')
 
-    document.getElementById("form").reset();
-
-    console.log(movieData);
   };
   return (
     <div className=" flex flex-col items-center">
