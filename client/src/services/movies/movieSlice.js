@@ -22,9 +22,12 @@ export const addMovie = createAsyncThunk(
   }
 );
 
-export const updateMovie = createAsyncThunk("movies/updateMovie", async (updatedData)=>{
-  return axios.put(`${baseUrl}`, updatedData)
-})
+export const updateMovie = createAsyncThunk(
+  "movies/updateMovie",
+  async (id, updatedData) => {
+    return axios.put(`${baseUrl}/${id}`, updatedData);
+  }
+);
 
 export const deleteMovie = createAsyncThunk(
   "movies/deleteMovie",
@@ -51,25 +54,26 @@ const movieSlice = createSlice({
       state.isLoading = true;
     },
     [addMovie.fulfilled]: (state, action) => {
-      state.isLoading = false
-      console.log(action.payload)
-      state.movieItems.push(action.payload)
-    //   state.movieItems = [action.payload]
+      state.isLoading = false;
+      console.log(action.payload);
+      state.movieItems.push(action.payload);
+      //   state.movieItems = [action.payload]
     },
     [addMovie.rejected]: (state) => {
       state.isLoading = false;
     },
-    [deleteMovie.pending]:(state) => {
-        state.isLoading = false
+    [deleteMovie.pending]: (state) => {
+      state.isLoading = false;
     },
-    [deleteMovie.fulfilled]:(state, action) => {
-      
-        console.log(action.meta.arg)
-        state.movieItems = state.movieItems.filter(item => item._id !== action.meta.arg)
-        state.isLoading = false
+    [deleteMovie.fulfilled]: (state, action) => {
+      console.log(action.meta.arg);
+      state.movieItems = state.movieItems.filter(
+        (item) => item._id !== action.meta.arg
+      );
+      state.isLoading = false;
     },
-    [deleteMovie.rejected]:(state) => {
-        state.isLoading = false
+    [deleteMovie.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });

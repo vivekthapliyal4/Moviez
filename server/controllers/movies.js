@@ -10,6 +10,20 @@ const getMovies = async (req, res) => {
   }
 };
 
+const getMovie = async(req, res) => {
+  const { id } = req.params
+  try {
+    if(id){
+      const movie = await Movie.findById(id)
+      return res.status(200).json(movie)
+    }else{
+      return res.status(404).send("cannot find then movie")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const createMovie = async (req, res) => {
   const movie = req.body;
   const newMovie = new Movie({ ...movie, createdAt: new Date() });
@@ -43,4 +57,4 @@ const updateMovie = async (req, res) => {
   res.json(updatedMovie);
 };
 
-module.exports = { getMovies, createMovie, removeMovie, updateMovie };
+module.exports = { getMovies, getMovie, createMovie, removeMovie, updateMovie };
