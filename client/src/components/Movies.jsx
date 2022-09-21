@@ -1,42 +1,23 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getMovies } from "../api";
-import { removeItem } from "../api";
 import Movie from "./Movie";
 
+import { getMovies } from "../services/movies/movieSlice";
+
 const Movies = () => {
-  // const { isLoading, data, isError, error } = useQuery("movies", getMovies);
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // const getMovies = async () => {
-  //   axios
-  //     .get("http://localhost:8000/movies/")
-  //     .then((res) => setMovies(res.data))
-  //     .catch((err) => console.log(err));
-  //   console.log(movies);
-  // };
-
-  useEffect(() => {
-    getMovies().then((res) => {
-      setMovies(res.data) // setting setMovies to res will set it to the array and res.data will set it to the array 
-      // setting it to the object will make it hard to mutate the array
-      setIsLoading(false)
-    });
-  }, []);
+  const {movieItems, isLoading} = useSelector(state=> state.movie)
+  console.log(movieItems)
+  const dispatch = useDispatch();
 
   const [query, setQuery] = useState("");
 
-  console.log(movies);
+  useEffect(()=>{
+    dispatch(getMovies())
+  }, [dispatch])
 
-  const removeMovie = (id) => {
-    const newMovies = movies?.filter((movie)=> movie._id !== id)
-    setMovies(newMovies)
-    console.log(newMovies)
-  }
-  
+
+
 
   return (
     <>
@@ -68,7 +49,7 @@ const Movies = () => {
               </button>
             </form>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8'">
-              {movies
+              {movieItems
                 ?.filter((data) => {
                   if (query.trim() === "") {
                     return data;
@@ -78,8 +59,11 @@ const Movies = () => {
                     return data;
                   }
                 })
-                .map((data, index) => (
-                  <Movie key={data?._id} removeMovie={removeMovie} data={data} />
+                .map((data) => (
+                  <Movie
+                    key={data._id}
+                    data={data}
+                  />
                 ))}
             </div>
           </div>

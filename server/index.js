@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+require('dotenv').config()
+
 const { default: mongoose } = require("mongoose");
 const bodyParser = require("body-parser");
 
@@ -19,8 +21,7 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-const CONNECTION_URL =
-  "mongodb+srv://vivekthapliyal:xErbST7UJHlnn3t7@cluster0.lkgagzi.mongodb.net/?retryWrites=true&w=majority";
+const CONNECTION_URL = process.env.CONNECTION_URL
 
 const PORT = process.env.PORT || 8000;
 

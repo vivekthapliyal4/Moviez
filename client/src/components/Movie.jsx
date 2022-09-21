@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { removeItem } from "../api";
+import { useDispatch } from "react-redux";
+import { deleteMovie } from "../services/movies/movieSlice";
 
-const Movie = ({ data, removeMovie }) => {
+const Movie = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch()
   const showMenu = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
   };
-
-  // const queryClient = useQueryClient();
-  // const { mutationAsync, isLoading } = useMutation(removeItem);
 
   return (
     <>
@@ -34,7 +32,10 @@ const Movie = ({ data, removeMovie }) => {
               Edit
             </li>
             <li
-              onClick={() => removeMovie(data._id)}
+              onClick={() => {
+                dispatch(deleteMovie(data._id))
+              
+              }}
               className="px-4 cursor-pointer hover:bg-zinc-700"
             >
               Delete
@@ -48,8 +49,8 @@ const Movie = ({ data, removeMovie }) => {
           <p className="text-gray-600 text-base">{data.excerpt}</p>
         </div>
         <div className="px-6 pt-4 pb-5">
-          {data?.genres?.map((genre) => (
-            <span className="inline-block bg-zinc-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">
+          {data?.genres?.map((genre, index) => (
+            <span key={index} className="inline-block bg-zinc-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2">
               {genre}
             </span>
           ))}
